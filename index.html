@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Inicio</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .imagen-principal {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Mantiene la proporción sin deformar */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Imagen con interactividad -->
+  <img src="img/portada.png" usemap="#image-map" alt="Portada" class="imagen-principal" id="imagen">
+
+  <map name="image-map">
+    <area alt="zona 1" href="practica.html" coords="395,807,654,862" shape="rect" class="area-1">
+    <area alt="zona 2" href="practica.html" coords="913,1038,1008,1060" shape="rect" class="area-2">
+  </map>
+
+  <script>
+    window.onload = function() {
+      // Calculamos el tamaño de la imagen en pantalla
+      const img = document.getElementById("imagen");
+
+      // Función para recalcular las coordenadas basadas en el tamaño de la imagen
+      function ajustarCoordenadas() {
+        const imgWidth = img.clientWidth;
+        const imgHeight = img.clientHeight;
+
+        // Coordenadas originales
+        const coords1 = [395, 807, 654, 862]; // Zona 1
+        const coords2 = [913, 1038, 1008, 1060]; // Zona 2
+
+        // Calculamos el factor de escala
+        const scaleX = imgWidth / 1920; // Asumiendo que la imagen original es de 1920px de ancho
+        const scaleY = imgHeight / 1080; // Asumiendo que la imagen original es de 1080px de alto
+
+        // Reajustamos las coordenadas
+        document.querySelector('.area-1').setAttribute('coords', coords1.map(coord => Math.round(coord * (coord === coords1[0] || coord === coords1[2] ? scaleX : scaleY))).join(','));
+        document.querySelector('.area-2').setAttribute('coords', coords2.map(coord => Math.round(coord * (coord === coords2[0] || coord === coords2[2] ? scaleX : scaleY))).join(','));
+      }
+
+      // Ajustamos las coordenadas cuando la página cargue
+      ajustarCoordenadas();
+
+      // Reajustamos las coordenadas si el tamaño de la ventana cambia
+      window.onresize = ajustarCoordenadas;
+    }
+  </script>
+
+</body>
+</html>

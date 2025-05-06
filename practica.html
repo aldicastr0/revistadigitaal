@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Práctica</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Imagen principal */
+    .imagen-principal {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Contenedor de las imágenes adicionales */
+    .imagenes-adicionales {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    /* Estilo para las imágenes adicionales */
+    .imagen-adicional {
+      width: 100%;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    /* Estilo para las imágenes flotantes */
+    .hover-img {
+      position: absolute;
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+      pointer-events: none;
+    }
+
+    /* Animación de aparición */
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    /* Fondo de animación para los hover */
+    .hover-bg {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      pointer-events: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Imagen de la segunda página (principal) -->
+  <img src="img/3.png" usemap="#image-map" alt="Práctica" class="imagen-principal" id="imagen">
+
+  <map name="image-map">
+    <area alt="Zona 1" title="Zona 1" href="practica.html" coords="395,807,654,862" shape="rect" class="area-1">
+    <area alt="Zona 2" title="Zona 2" href="practica.html" coords="913,1038,1008,1060" shape="rect" class="area-2">
+  </map>
+
+  <!-- Imágenes adicionales que se verán al hacer scroll -->
+  <div class="imagenes-adicionales">
+    <img src="img/4.png" class="imagen-adicional" alt="Imagen adicional 4">
+    <img src="img/5.png" usemap="#image-map-5" class="imagen-adicional" alt="Imagen 5">
+  </div>
+
+  <!-- Contenedor para imágenes que aparecen al pasar el mouse -->
+  <div id="hover-images">
+    <img src="img/bd1.png" id="hover1" class="hover-img">
+    <img src="img/bd2.png" id="hover2" class="hover-img">
+    <img src="img/bn3.png" id="hover3" class="hover-img">
+  </div>
+
+  <map name="image-map-5">
+    <area alt="Buendía" href="buendia.html" coords="150,270,500,340" shape="rect">
+  </map>
+
+  <script>
+    window.onload = function () {
+      const mapAreas = [
+        { id: "hover1", coords: [395, 807, 654, 862] },
+        { id: "hover2", coords: [913, 1038, 1008, 1060] },
+        { id: "hover3", coords: [419, 195, 574, 324] }
+      ];
+
+      const imageMap = document.querySelector('map[name="image-map-5"]');
+
+      // Crear las áreas para la imagen de hover
+      mapAreas.forEach(area => {
+        const areaElem = document.createElement("area");
+        areaElem.setAttribute("shape", "rect");
+        areaElem.setAttribute("coords", area.coords.join(","));
+        areaElem.setAttribute("href", "#");
+
+        // Eventos para mostrar y ocultar las imágenes flotantes
+        areaElem.addEventListener("mouseenter", () => {
+          mostrarImagen(area.id, area.coords);
+        });
+        areaElem.addEventListener("mouseleave", () => {
+          ocultarImagen(area.id);
+        });
+
+        imageMap.appendChild(areaElem);
+      });
+
+      // Función para mostrar la imagen flotante en la posición adecuada
+      function mostrarImagen(id, coords) {
+        const img = document.getElementById(id);
+        const left = coords[0];
+        const top = coords[1] - 50; // Ajustamos para que suba un poco
+
+        img.style.left = left + "px";
+        img.style.top = top + "px";
+        img.style.display = "block"; // Mostramos la imagen flotante
+
+        // Mostramos el fondo
+        const bg = document.createElement("div");
+        bg.id = "hover-bg";
+        document.body.appendChild(bg);
+        bg.style.left = left + "px";
+        bg.style.top = top + "px";
+        bg.style.width = (coords[2] - coords[0]) + "px";
+        bg.style.height = (coords[3] - coords[1]) + "px";
+        bg.style.display = "block";
+      }
+
+      // Función para ocultar la imagen flotante
+      function ocultarImagen(id) {
+        const img = document.getElementById(id);
+        img.style.display = "none"; // Ocultamos la imagen flotante
+
+        // Ocultamos el fondo
+        const bg = document.getElementById("hover-bg");
+        if (bg) {
+          bg.style.display = "none";
+        }
+      }
+    };
+  </script>
+
+</body>
+</html>
